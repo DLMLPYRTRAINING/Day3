@@ -15,7 +15,7 @@
 #     linear_model.LassoLars(),
 #     linear_model.ARDRegression(),
 #     linear_model.PassiveAggressiveRegressor(),
-#     linear_model.TheilSenRegressor(),]
+#     linear_model.TheilSenRegressor()]
 #
 # import pandas as pd
 # import matplotlib.pyplot as plt
@@ -84,14 +84,14 @@
 #     model.fit(Train_F,Train_T.ravel())
 #
 #     # score model
-#     score = model.score(Train_F, Train_T)
+#     score = model.score(Train_F, Train_T.ravel())
 #
 #     # predict
 #     predict = model.predict(Test_F)
 #
 #     #error%
-#     mse = mean_squared_error(Test_T,predict)
-#     r2 = r2_score(Test_T,predict)
+#     mse = mean_squared_error(Test_T.ravel(),predict)
+#     r2 = r2_score(Test_T.ravel(),predict)
 #
 #     # print everything
 #     print(item)
@@ -105,7 +105,7 @@
 # #show plot
 # plt.show()
 
-# # ---------------------------------------------------------------
+# ---------------------------------------------------------------
 # # classification with logistic regression
 # from sklearn.linear_model import LogisticRegression
 # import pandas as pd
@@ -117,8 +117,8 @@
 # #first we'll have to convert the strings "No" and "Yes" to numeric values
 # data.loc[data["default"] == "No", "default"] = 0
 # data.loc[data["default"] == "Yes", "default"] = 1
-# X = data["balance"].values.reshape(-1, 1)
-# Y = data["default"].values.reshape(-1, 1)
+# X = data["balance"][:-1].values.reshape(-1, 1)
+# Y = data["default"][:-1].values.reshape(-1, 1)
 #
 # x_test = data["balance"][-1:].values.reshape(-1, 1)
 # y_test = data["default"][-1:].values.reshape(-1, 1)
@@ -157,7 +157,7 @@
 #            loc="lower right", fontsize='small')
 # plt.show()
 
-# # ---------------------------------------------------
+# ---------------------------------------------------
 # # classification - random forest
 # from sklearn.ensemble import RandomForestClassifier
 # import pandas as pd
@@ -179,6 +179,48 @@
 # model = RandomForestClassifier()
 #
 # # train model
+# model.fit(X,Y.ravel())
+#
+# # score model
+# score = model.score(X,Y.ravel())
+# print("Score:\n", score)
+#
+# predict = model.predict(x_test)
+# print("Prediction Feature:\n", x_test)
+# print("Prediction Value:\n", predict)
+# print("Actual Value:\n",y_test)
+
+# # -----------------------------------------------------------------
+# # classification - decision tree
+#
+# from sklearn.datasets import load_iris
+# from sklearn.model_selection import cross_val_score
+# from sklearn.tree import DecisionTreeClassifier
+# clf = DecisionTreeClassifier(random_state=0)
+# iris = load_iris()
+# print(cross_val_score(clf, iris.data, iris.target, cv=10))
+# -----------------------------------------------------------
+
+# from sklearn.tree import DecisionTreeClassifier
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import numpy as np
+# from sklearn.model_selection import cross_val_score
+#
+# data = pd.read_csv(r"C:\Users\SKL\Documents\DLMLPYRTRAINING\Day3\Datasets\Classification.csv")
+#
+# #first we'll have to convert the strings "Single_Digit" and "Double_Digit" to numeric values
+# data.loc[data["Class"] == "Single_Digit", "Class"] = 0
+# data.loc[data["Class"] == "Double_Digit", "Class"] = 1
+# X = data["Number"][:-2].values.reshape(-1, 1)
+# Y = data["Class"][:-2].values.reshape(-1, 1)
+#
+# x_test = data["Number"][-2:].values.reshape(-1, 1)
+# y_test = data["Class"][-2:].values.reshape(-1, 1)
+#
+# # build model
+# model = DecisionTreeClassifier()
+# # train model
 # model.fit(X,Y)
 #
 # # score model
@@ -191,3 +233,28 @@
 # print("Actual Value:\n",y_test)
 
 # ------------------------------------------------------------------
+# # Clustering - Kmeans
+# # import
+# from sklearn.cluster import KMeans
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import numpy as np
+#
+# # X = np.array([[1, 2], [1, 4], [1, 0],
+# #               [4, 2], [4, 4], [4, 0]])
+#
+# X = np.array([1,2,3,4,5,6,20,21,22,23,24,50,51,52,53,54,55])
+# X = X.reshape(-1,1)
+#
+# kmeans = KMeans(n_clusters=3, random_state=0).fit(X)
+#
+# print(kmeans.labels_)
+#
+# # print(kmeans.predict([[0, 0], [4, 4]]))
+# print(kmeans.predict([[9], [30], [60]]))
+#
+# print(kmeans.cluster_centers_)
+#
+# # plt.plot(X[:,0],X[:,1])
+# plt.show()
+
